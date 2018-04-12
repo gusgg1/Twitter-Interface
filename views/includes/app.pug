@@ -89,45 +89,14 @@
               if id_str === directMsg.message_create.sender_id
                 li.app--message--me
                   .app--avatar(style=`background-image: url(${verifyCredentials.profile_image_url_https})`)
-                    img(src='images/m-spore.png')
+                    img(src=`${verifyCredentials.profile_image_url_https}`)
                   p.app--message--text #{directMsg.message_create.message_data.text}
-                  p.app--message--timestamp
+                  p.app--message--timestamp #{directMsg.created_timestamp}
               else 
                 li.app--message
-                  .app--avatar(style='background-image: url(images/f-spore.png)')
-                    img(src='images/f-spore.png')
-                  p.app--message--text #{directMsg.message_create.message_data.text}
-                  p.app--message--timestamp 3 hours ago
-
-
-            //- li.app--message--me
-            //-   .app--avatar(style='background-image: url(images/m-spore.png)')
-            //-     img(src='images/m-spore.png')
-            //-   p.app--message--text
-            //-     | Great! How about you? Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            //-   p.app--message--timestamp 2 hours ago
-            //- li.app--message
-            //-   .app--avatar(style='background-image: url(images/f-spore.png)')
-            //-     img(src='images/f-spore.png')
-            //-   p.app--message--text Fantastic! You wanna grab lunch?
-            //-   p.app--message--timestamp 2 hours ago
-            //- li.app--message--me
-            //-   .app--avatar(style='background-image: url(images/m-spore.png)')
-            //-     img(src='images/m-spore.png')
-            //-   p.app--message--text Totes mcgotes. How about Mackey's?
-            //-   p.app--message--timestamp 1 hour ago
-            //- li.app--message
-            //-   .app--avatar(style='background-image: url(images/f-spore.png)')
-            //-     img(src='images/f-spore.png')
-            //-   p.app--message--text Aww yeah.. I'm craving a Triple Quarter Mack!
-            //-   p.app--message--timestamp 1 hour ago
-            //- li.app--message--me
-            //-   .app--avatar(style='background-image: url(images/m-spore.png)')
-            //-     img(src='images/m-spore.png')
-            //-   p.app--message--text Totes mcgotes. How about Mackey's?
-            //-   p.app--message--timestamp 1 hour ago
-            //- li.app--message
-            //-   .app--avatar(style='background-image: url(images/f-spore.png)')
-            //-     img(src='images/f-spore.png')
-            //-   p.app--message--text Fantastic! You wanna grab lunch?
-            //-   p.app--message--timestamp 2 hours ago
+                  each infoSender in infoSenders 
+                    if infoSender.id_str !== id_str
+                      .app--avatar(style=`background-image: url(${infoSender.profile_image_url_https})`)
+                        img(src=`${infoSender.profile_image_url_https}`)
+                      p.app--message--text #{directMsg.message_create.message_data.text}
+                      p.app--message--timestamp #{directMsg.created_timestamp}

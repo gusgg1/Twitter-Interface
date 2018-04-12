@@ -17,7 +17,6 @@ app.set('view engine', 'pug');
 // Route ---------------------------------------
 
 app.get('/', (req, res) => {
-
   T.get('account/verify_credentials')
     .then(function (result) {
       const verifyCredentials = result.data; // Obj
@@ -39,7 +38,7 @@ app.get('/', (req, res) => {
         // console.log(response[3].data.events);
 
 
-        // console.log(directMsgs);      
+        console.log(directMsgs);      
         // console.log(directMsgs[0].message_create.message_data.text);
         // console.log(directMsgs[0].message_create);
         
@@ -47,25 +46,23 @@ app.get('/', (req, res) => {
           return directMsg.message_create.sender_id;
         });
 
-        // T.get('users/lookup', { user_id: arrIDS },  function (err, data, response) {
-        //   console.log(data);
-        // })
+        T.get('users/lookup', { user_id: IDs })
+          .then(response => {
+            const infoSenders = response.data;
+            
+            let templateData = { 
+              id_str,
+              profileBanner, 
+              verifyCredentials, 
+              friendList,
+              tweets,
+              directMsgs,
+              IDs,
+              infoSenders 
+            };
 
-        console.log(IDs);
-
-    
-        let templateData = { 
-          id_str,
-          profileBanner, 
-          verifyCredentials, 
-          friendList,
-          tweets,
-          directMsgs 
-        };
-    
-        // console.log(templateData);
-    
-        res.render('layout', templateData);    
+            res.render('layout', templateData);  
+          })  
       })
     });
 });
