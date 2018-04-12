@@ -1,0 +1,27 @@
+{
+  "name": "twitter-interface",
+  "version": "1.0.0",
+  "description": "Twitter interface displaying information from user",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gusgg1/Twitter-Interface.git"
+  },
+  "author": "G.A.F",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gusgg1/Twitter-Interface/issues"
+  },
+  "homepage": "https://github.com/gusgg1/Twitter-Interface#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.3",
+    "moment": "^2.22.0",
+    "pug": "^2.0.3",
+    "twit": "^2.2.9"
+  }
+}
