@@ -19,20 +19,22 @@ app.set('view engine', 'pug');
 
 // --------------------------------- ROUTES ------------------------------------
 
+// The home route, getting data using promises and rendering
 app.get('/', (req, res) => {
+  // getting user credentials for promises
   T.get('account/verify_credentials')
     .then(function (result) {
       const verifyCredentials = result.data;
       const { screen_name } = verifyCredentials;
       const { id_str } = verifyCredentials;
 
+      // getting data using promises and assigning them to variables
       Promise.all([
         T.get('users/profile_banner', { screen_name }),
         T.get('friends/list', { count: 5 }),
         T.get("statuses/user_timeline", { q: screen_name, count: 5 }),
         T.get('direct_messages/events/list', { count: 8 })
       ])
-      .then(checkStatus)
       .then(response => { 
         const profileBanner = response[0].data.sizes;
         const friendList = response[1].data.users; 
@@ -42,10 +44,12 @@ app.get('/', (req, res) => {
           return directMsg.message_create.sender_id;
         });
 
+        // getting profile info of users that sent a direct message
         T.get('users/lookup', { user_id: IDs })
           .then(response => {
             const infoSenders = response.data;
             
+            // all the data needed to render in one place
             let templateData = { 
               moment: require('moment'), 
               id_str,
@@ -58,6 +62,7 @@ app.get('/', (req, res) => {
               infoSenders
             };
 
+            // rendering the home page
             res.render('layout', templateData)
           });  
       });
@@ -73,21 +78,22 @@ app.post('/', (req, res) => {
 });
 
 
+// Exceeds: route handling error
+app.use((req, res, next) => {
+  const err = new Error('Page Not Found');
+  err.status = 404;
+  next(err);
+});
+
+app.use((err, req, res, next) => {
+  // console.log(req);
+  res.locals.error = err;
+  res.status(err.status);
+  res.render('error', err);  
+});
+
+
 // Server
 app.listen(1337, () => {
   console.log("Listening on 1337");
 });
-
-
-// ------------------------ HELPERS ---------------------
-
-function checkStatus(response) {
-  if (response[1].resp.statusCode) {
-    return Promise.resolve(response);
-  } else {
-    return Promise.reject(new Error(response.statusMessage));
-  }
-}
-
-
-// timeline

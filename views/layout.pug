@@ -20,11 +20,17 @@ html(lang="en")
       CSS
       ––––––––––––––––––––––––––––––––––––––––––––––––––
     link(rel='stylesheet', href='/css/global.css')
+    if error
+      link(rel='stylesheet', href='/css/style.css')
     script(src="/js/main.js")
   body 
-    include includes/header.pug 
-    include includes/tweetbox.pug
-    include includes/app.pug
+    if error
+      block main
+    else
+      include includes/header.pug 
+      include includes/tweetbox.pug
+      include includes/app.pug
+  
     
 
       

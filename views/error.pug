@@ -1,0 +1,17 @@
+extends layout
+
+block main
+  section
+  ul#creatures.creatures
+    li
+      .click-anim
+        figure.hungry(style='background-colo: ')
+          .eye
+          .mouth
+      .shadow
+      figcaption
+        a(rel='external', href="/")
+          h3 Sorry there was an error! 
+          h4 Click here to go back :)
+        p #{error} #{error.status}
+        
