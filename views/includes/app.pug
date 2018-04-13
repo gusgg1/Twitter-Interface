@@ -91,7 +91,7 @@
                   .app--avatar(style=`background-image: url(${verifyCredentials.profile_image_url_https})`)
                     img(src=`${verifyCredentials.profile_image_url_https}`)
                   p.app--message--text #{directMsg.message_create.message_data.text}
-                  p.app--message--timestamp #{directMsg.created_timestamp}
+                  p.app--message--timestamp= moment(parseInt(directMsg.created_timestamp)).fromNow()
               else 
                 li.app--message
                   each infoSender in infoSenders 
@@ -99,4 +99,5 @@
                       .app--avatar(style=`background-image: url(${infoSender.profile_image_url_https})`)
                         img(src=`${infoSender.profile_image_url_https}`)
                       p.app--message--text #{directMsg.message_create.message_data.text}
-                      p.app--message--timestamp #{directMsg.created_timestamp}
+                      p.app--message--timestamp= moment(parseInt(directMsg.created_timestamp)).fromNow()
+

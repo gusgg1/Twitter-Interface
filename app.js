@@ -1,25 +1,28 @@
-
+// Requiring packages
 const express = require('express');
 const config = require('./config');
 const Twit = require('twit');
 const bodyParser = require('body-parser');
 const moment = require('moment');
 
+// Creating Express app
 const app = express();
 
+// Adding config json to the Twit package
 const T = new Twit(config);
 
+// App configurations
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.set('view engine', 'pug');
 
 
-// Route ---------------------------------------
+// --------------------------------- ROUTES ------------------------------------
 
 app.get('/', (req, res) => {
   T.get('account/verify_credentials')
     .then(function (result) {
-      const verifyCredentials = result.data; // Obj
+      const verifyCredentials = result.data;
       const { screen_name } = verifyCredentials;
       const { id_str } = verifyCredentials;
 
@@ -29,19 +32,12 @@ app.get('/', (req, res) => {
         T.get("statuses/user_timeline", { q: screen_name, count: 5 }),
         T.get('direct_messages/events/list', { count: 8 })
       ])
+      .then(checkStatus)
       .then(response => { 
         const profileBanner = response[0].data.sizes;
-        const friendList = response[1].data.users; // array of users
-        const tweets = response[2].data; // array of objs
-        const directMsgs = response[3].data.events.reverse(); // arr of objs
-
-        // console.log(response[3].data.events);
-
-
-        console.log(directMsgs);      
-        // console.log(directMsgs[0].message_create.message_data.text);
-        // console.log(directMsgs[0].message_create);
-        
+        const friendList = response[1].data.users; 
+        const tweets = response[2].data;
+        const directMsgs = response[3].data.events.reverse(); 
         const IDs = directMsgs.map(directMsg => {
           return directMsg.message_create.sender_id;
         });
@@ -51,6 +47,7 @@ app.get('/', (req, res) => {
             const infoSenders = response.data;
             
             let templateData = { 
+              moment: require('moment'), 
               id_str,
               profileBanner, 
               verifyCredentials, 
@@ -58,56 +55,39 @@ app.get('/', (req, res) => {
               tweets,
               directMsgs,
               IDs,
-              infoSenders 
+              infoSenders
             };
 
-            res.render('layout', templateData);  
-          })  
-      })
+            res.render('layout', templateData)
+          });  
+      });
     });
 });
 
-/*
-function test() { 
 
-  T.get('direct_messages/events/list', { count: 8 }, function(err, data, response) {
-    // console.log(data.events); // Arr of objs
-    // console.log(data.events[0].message_create.sender_id); // Arr of objs
-    const arrDataMessages = data.events;
-    const arrIDS = arrDataMessages.map(arrDataMessage => {
-      return arrDataMessage.message_create.sender_id;
-    });
-    console.log(arrIDS);
+// Exceeds: Posting a tweet
+app.post('/', (req, res) => {
+  const tweet = req.body.tweet;
+  T.post('statuses/update', { status: tweet })
+  res.redirect('/');
+});
 
 
-    T.get('users/lookup', { user_id: arrIDS },  function (err, data, response) {
-      console.log(data);
-    })
-    
-    
-  });
- 
-}
-
-test()
-*/
-
-
-/*
-[ '978998473612816384',  // guus
-  '1887672271',          // Darnley Francis
-  '978998473612816384',  // guus
-  '23078111',            // Dennis
-  '23078111' ]           // Dennis 
-*/
-
-
-
-
-// ******************** HELPERS ********************
-
-
+// Server
 app.listen(1337, () => {
   console.log("Listening on 1337");
 });
 
+
+// ------------------------ HELPERS ---------------------
+
+function checkStatus(response) {
+  if (response[1].resp.statusCode) {
+    return Promise.resolve(response);
+  } else {
+    return Promise.reject(new Error(response.statusMessage));
+  }
+}
+
+
+// timeline
