@@ -4,7 +4,7 @@
 
 ###### This is my seventh of twelve projects for the Techdegree Full Stack JavaScript.
 
-This is app is a Twitter interface that will display the following:
+This app is a Twitter interface that will display the following:
 * Your 5 most recent tweets
 * Your 5 most recent friends
 * Your 5 most recent sent and received messages.
@@ -26,5 +26,13 @@ module.exports = {
   access_token_secret: "YOUR-ACCESS-TOKEN-SECRET"
 };
 ```
-Lastly, run `npm install` and `npm start` in the terminal and view the app on port:`http://localhost:`
+Lastly, run 
+
+* `npm install` 
+
+and 
+
+* `npm start` 
+
+in the terminal and view the app on port:`http://localhost:1337`
 
