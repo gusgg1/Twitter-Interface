@@ -1,4 +1,8 @@
-## Twitter-Interface
+# Twitter Interface
+
+#### Project 7
+
+###### This is my seventh of twelve projects for the Techdegree Full Stack JavaScript.
 
 This is app is a Twitter interface that will display the following:
 * Your 5 most recent tweets
