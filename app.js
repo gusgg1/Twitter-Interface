@@ -3,7 +3,7 @@ const express = require('express');
 const config = require('./config');
 const Twit = require('twit');
 const bodyParser = require('body-parser');
-const moment = require('moment');
+
 
 // Creating Express app
 const app = express();
